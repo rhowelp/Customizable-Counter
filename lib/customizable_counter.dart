@@ -17,7 +17,7 @@ class CustomizableCounter extends StatefulWidget {
   final Color? backgroundColor;
 
   /// text that will shown on widget if counter value is zero.
-  final String? buttonText;
+  final Widget? buttonChild;
 
   /// button title and counter text color
   final Color? textColor;
@@ -63,15 +63,23 @@ class CustomizableCounter extends StatefulWidget {
   /// called when the counter value increase by clicking increment button.
   final void Function(double c)? onDecrement;
 
+  /// widget width
+  final double? width;
+
+  /// widget padding
+  final EdgeInsetsGeometry? padding;
+
   const CustomizableCounter(
       {Key? key,
       this.borderColor,
       this.borderWidth,
       this.borderRadius,
       this.backgroundColor,
-      this.buttonText,
+      this.buttonChild,
       this.textColor,
       this.textSize,
+      this.width,
+      this.padding,
       this.decrementIcon,
       this.incrementIcon,
       this.suffix = "",
@@ -124,36 +132,44 @@ class _CustomizableCounterState extends State<CustomizableCounter> {
     return Wrap(
       children: [
         Container(
+          width: widget.width ?? 120,
+          padding: widget.padding ?? const EdgeInsets.all(10),
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: widget.backgroundColor,
             borderRadius: BorderRadius.circular(widget.borderRadius ?? 10),
             shape: BoxShape.rectangle,
             border: Border.all(
-                color: widget.borderColor ?? Theme.of(context).primaryColor,
-                width: widget.borderWidth ?? 2.0),
+              color: widget.borderColor ?? Theme.of(context).primaryColor,
+              width: widget.borderWidth ?? 2.0,
+            ),
           ),
           child: ((mCount <= widget.minCount) && widget.showButtonText)
-              ? MaterialButton(
-                  onPressed: () {
+              ? GestureDetector(
+                  onTap: () {
                     increment();
                   },
-                  child: Text(
-                    widget.buttonText ?? "Add",
-                    style: TextStyle(
-                      color: widget.textColor,
-                      fontSize: widget.textSize,
-                    ),
-                  ))
+                  child: widget.buttonChild ??
+                      Text(
+                        "Add",
+                        style: TextStyle(
+                          color: widget.textColor,
+                          fontSize: widget.textSize,
+                        ),
+                      ),
+                )
               : Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                        onPressed: decrement,
-                        icon: widget.decrementIcon ??
-                            Icon(
-                              Icons.remove,
-                              color: widget.textColor,
-                            )),
+                    GestureDetector(
+                      onTap: decrement,
+                      child: widget.decrementIcon ??
+                          Icon(
+                            Icons.remove,
+                            color: widget.textColor,
+                          ),
+                    ),
+                    const SizedBox(width: 10),
                     Text(
                       "${widget.prefix}${_formatDouble(mCount)}${widget.suffix}",
                       textAlign: TextAlign.center,
@@ -162,16 +178,18 @@ class _CustomizableCounterState extends State<CustomizableCounter> {
                         fontSize: widget.textSize,
                       ),
                     ),
-                    IconButton(
-                        onPressed: increment,
-                        icon: widget.incrementIcon ??
-                            Icon(
-                              Icons.add,
-                              color: widget.textColor,
-                            )),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: increment,
+                      child: widget.incrementIcon ??
+                          Icon(
+                            Icons.add,
+                            color: widget.textColor,
+                          ),
+                    ),
                   ],
                 ),
-        )
+        ),
       ],
     );
   }

@@ -39,25 +39,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: CustomizableCounter(
-          borderColor: Colors.yellow,
-          borderWidth: 5,
-          borderRadius: 100,
-          backgroundColor: Colors.amberAccent,
-          buttonText: "Add Item",
-          textColor: Colors.white,
-          textSize: 22,
+          borderColor: Colors.blue,
+          borderWidth: 2,
+          borderRadius: 5,
+          textColor: Colors.blue,
+          textSize: 14,
           count: 0,
           step: 1,
           minCount: 0,
           maxCount: 10,
-          suffix: "%",
           incrementIcon: const Icon(
             Icons.add,
-            color: Colors.white,
+            color: Colors.blue,
+            size: 20,
           ),
           decrementIcon: const Icon(
             Icons.remove,
-            color: Colors.white,
+            color: Colors.blue,
+            size: 20,
           ),
           onDecrement: (value) {
             ScaffoldMessenger.of(context).showSnackBar(
